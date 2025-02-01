@@ -13,7 +13,7 @@ protocol NetworkServiceProtocol {
     func fetchData(urlRequest: URLRequest) async throws(NetworkError) -> Data
 }
 
-actor NetworkService: NetworkServiceProtocol {
+struct NetworkService: NetworkServiceProtocol {
     func fetchData(urlRequest: URLRequest) async throws(NetworkError) -> Data {
         do {
             let (data, response) = try await URLSession.shared.data(for: urlRequest)
