@@ -40,7 +40,7 @@ struct DecoderServiceTest {
         #expect(result.count == 2)
     }
     
-    @Test func invalidJson() {
+    @Test("Проверка невалидный JSON") func invalidJson() {
         let invalidJson = """
         [
             {"id": "1", "name": "Milk",

@@ -14,9 +14,16 @@ protocol NetworkServiceProtocol {
 }
 
 struct NetworkService: NetworkServiceProtocol {
+    
+    let session: URLSession
+
+    init(session: URLSession = URLSession.shared) {
+        self.session = session
+    }
+    
     func fetchData(urlRequest: URLRequest) async throws(NetworkError) -> Data {
         do {
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            let (data, response) = try await session.data(for: urlRequest)
 
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw NetworkError.badResponse(statusCode: -1)
