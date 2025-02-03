@@ -6,7 +6,7 @@
 //
 
 /// Сборщик зависимостей сервисного слоя
-final class ServiceLayerAssembler {
+final class ServiceLayerAssembly {
     
     func registerServices(in container: DIContainer) {
         container.register(NetworkServiceProtocol.self) {

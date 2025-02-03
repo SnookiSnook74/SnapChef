@@ -29,6 +29,9 @@ final class DIContainer: ObservableObject {
 extension DIContainer {
     
     func registerAllDependencies() {
-        ServiceLayerAssembler().registerServices(in: self)
+        ServiceLayerAssembly().registerServices(in: self)
+        DataLayerAssembly().registerServices(in: self)
+        DomainLayerAssembly().registerServices(in: self)
+        PresentationLayerAssembly().registerServices(in: self)
     }
 }
