@@ -21,21 +21,24 @@ struct OpenAIRequestService: RequestServiceProtocol {
     let userMessage: String
     let jsonSchema: [String: Any]
     let recipeType: String?
+    let imageURL: String?
 
     init(
         apiKey: String = OpenAI.apiKey,
-        model: String = "gpt-4o",
-        maxTokens: Int = 500,
+        model: String = "gpt-4o-mini",
+        maxTokens: Int = 1000,
         urlString: String = "https://api.openai.com/v1/chat/completions",
         recipeType: String? = nil,
         userMessage: String? = nil,
-        jsonSchema: [String: Any]? = nil
+        jsonSchema: [String: Any]? = nil,
+        imageURL: String? = nil
     ) {
         self.apiKey = apiKey
         self.model = model
         self.maxTokens = maxTokens
         self.urlString = urlString
         self.recipeType = recipeType
+        self.imageURL = imageURL
         
         if let userMessage = userMessage {
             self.userMessage = userMessage
@@ -78,13 +81,34 @@ struct OpenAIRequestService: RequestServiceProtocol {
     
     /// Функция для формирования URLRequest
     func buildRequest() -> URLRequest? {
+        // Если задан imageURL, формируем content как массив из двух объектов:
+        // один с текстом, другой с информацией об изображении.
+        // Если imageURL не указан – просто передаём текстовое сообщение.
+        let messageContent: Any
+        if let imageURL = imageURL {
+            messageContent = [
+                [
+                    "type": "text",
+                    "text": userMessage
+                ],
+                [
+                    "type": "image_url",
+                    "image_url": [
+                        "url": imageURL
+                    ]
+                ]
+            ]
+        } else {
+            messageContent = userMessage
+        }
+        
         // Формирование параметров запроса
         let parameters: [String: Any] = [
             "model": model,
             "messages": [
                 [
                     "role": "user",
-                    "content": userMessage
+                    "content": messageContent
                 ]
             ],
             "response_format": [
@@ -101,7 +125,7 @@ struct OpenAIRequestService: RequestServiceProtocol {
         guard let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: []) else {
             return nil
         }
-
+        
         guard let url = URL(string: urlString) else { return nil }
         
         // Формирование URLRequest
