@@ -22,6 +22,10 @@ struct SnapChefApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    init() {
+        DIContainer.shared.registerAllDependencies()
+    }
 
     var body: some Scene {
         WindowGroup {
