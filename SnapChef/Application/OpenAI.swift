@@ -17,3 +17,9 @@ struct OpenAI {
         }
     }
 }
+
+/// Доступные модели  для текста и голоса
+enum GptModel: String {
+    case gpt4o = "gpt-4o"
+    case gpt4oMini = "gpt-4o-mini"
+}
