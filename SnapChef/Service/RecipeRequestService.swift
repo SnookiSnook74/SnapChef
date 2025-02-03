@@ -7,26 +7,34 @@
 
 import Foundation
 
-struct RecipeRequestService {
+protocol RecipeRequestServiceProtocol {
+    /// Создание кастомного запроса
+    func buildRequest() -> URLRequest?
+}
+
+struct RecipeRequestService: RecipeRequestServiceProtocol {
     
-    let urlString: String
+    let apiKey: String
     let model: String
-    let userMessage: String
     let maxTokens: Int
+    let urlString: String
+    let userMessage: String
     let jsonSchema: [String: Any]
     let recipeType: String?
-    let apiKey = OpenAI.apiKey
 
     init(
-        urlString: String = "https://api.openai.com/v1/chat/completions",
+        apiKey: String = OpenAI.apiKey,
         model: String = "gpt-4o",
-        userMessage: String? = nil,
         maxTokens: Int = 500,
+        urlString: String = "https://api.openai.com/v1/chat/completions",
         recipeType: String? = nil,
+        userMessage: String? = nil,
         jsonSchema: [String: Any]? = nil
     ) {
-        self.urlString = urlString
+        self.apiKey = apiKey
         self.model = model
+        self.maxTokens = maxTokens
+        self.urlString = urlString
         self.recipeType = recipeType
         
         if let userMessage = userMessage {
@@ -37,7 +45,6 @@ struct RecipeRequestService {
             self.userMessage = "Представь, что ты профессиональный шеф-повар. Предложи мне рецепт вкусного блюда."
         }
         
-        self.maxTokens = maxTokens
         self.jsonSchema = jsonSchema ?? [
             "type": "object",
             "properties": [
