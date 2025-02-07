@@ -9,10 +9,11 @@ import SwiftUI
 import SwiftData
 
 struct PhotoTabView: View {
-    @State private var viewModel = PhotoTabViewModel()
-    
+    private var viewModel = PhotoTabViewModel()
+    @State private var selectedImage: UIImage?
+    @State private var isShowingImagePicker = false
+
     var body: some View {
-        NavigationView {
             VStack {
                 if viewModel.isLoading {
                     ProgressView("Загрузка рецепта...")
@@ -47,26 +48,51 @@ struct PhotoTabView: View {
                         .foregroundColor(.red)
                         .padding()
                 } else {
-                    Text("Нажмите кнопку ниже, чтобы получить рецепт.")
+                    Text("Нажмите кнопку ниже, чтобы выбрать фото и получить рецепт.")
                         .padding()
                 }
                 
                 Spacer()
-                
+
                 Button {
-                    viewModel.fetchRecipe()
+                    isShowingImagePicker = true
                 } label: {
-                    Text("Получить рецепт")
+                    Text("Выбрать фото")
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.blue)
                         .cornerRadius(10)
+                        .padding([.leading, .trailing])
+                }
+                Button {
+                    guard let selectedImage = selectedImage else {
+                        print("Фото не выбрано!")
+                        return
+                    }
+                    if let imageData = selectedImage.jpegData(compressionQuality: 0.8) {
+                        let base64String = imageData.base64EncodedString()
+                        let dataUrlString = "data:image/jpeg;base64,\(base64String)"
+                        Task {
+                            await viewModel.getRecipe(dataUrlString)
+                        }
+                    }
+                } label: {
+                    Text("Получить рецепт")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green)
+                        .cornerRadius(10)
                         .padding([.leading, .trailing, .bottom], 16)
                 }
+                .disabled(selectedImage == nil)
             }
             .navigationTitle("SnapChef")
+            .sheet(isPresented: $isShowingImagePicker) {
+                ImagePicker(sourceType: .camera, selectedImage: $selectedImage)
+            }
         }
-    }
 }

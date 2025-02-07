@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var selectTab = 1
 
     init() {
         // Фон
@@ -19,16 +21,19 @@ struct ContentView: View {
     }
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectTab) {
             Text("First Tab").tabItem {
                 Label("First", systemImage: "star")
             }
+            .tag(0)
             PhotoTabView().tabItem {
                 Label("Hello", systemImage: "book")
             }
+            .tag(1)
             Text("Second Tab").tabItem {
                 Label("Second", systemImage: "star")
             }
+            .tag(2)
         }
     }
 }

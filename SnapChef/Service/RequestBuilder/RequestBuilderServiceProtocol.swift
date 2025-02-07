@@ -8,6 +8,6 @@
 import Foundation
 
 /// Протокол для работы с билдерами запросов к API
-protocol RequestBuilderServiceProtocol {
+protocol RequestBuilderServiceProtocol: Sendable {
     func buildRequest() -> URLRequest?
 }
