@@ -27,7 +27,7 @@ struct FunctionCall: Codable {
     let arguments: String?
 }
 
-struct Recipe: Codable {
+struct Recipe: Codable, Sendable {
     let title: String
     let ingredients: [String]
     let steps: [String]

@@ -10,13 +10,18 @@ import Foundation
 struct ChatRequestBuilder: RequestBuilderServiceProtocol {
     private var apiKey: String = OpenAI.apiKey
     private var model: GptModel = .gpt4oMini
+    /// Задаем статически так как он единственный на сегодняшний день для работы имено с текстом
     private var endpoint: String = "https://api.openai.com/v1/chat/completions"
     
-    // Параметры для чат-запроса
+    /// Максимальное кол-во токенов
     private var maxTokens: Int = 1000
+    /// Тип рецепта (по задумке пользователь будет выбирать что хочет: суп, салат и т/д)
     private var recipeType: String?
+    /// Стартовое сообщение с опипаснием чего мы ждем
     private var userMessage: String?
+    /// Json схема в рамках которой должна отвечать GPT
     private var jsonSchema: [String: Any]?
+    /// url картинки если мы хотим отправить фото на распознование
     private var imageURL: String?
     
     // MARK: - Fluent API методы для настройки
