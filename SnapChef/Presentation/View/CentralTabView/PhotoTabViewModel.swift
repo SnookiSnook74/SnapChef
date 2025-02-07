@@ -10,7 +10,7 @@ import SwiftData
 
 @MainActor
 @Observable
-final class CentralTabViewModel {
+final class PhotoTabViewModel {
     var recipe: Recipe?
     var isLoading = false
     var errorMessage: String?

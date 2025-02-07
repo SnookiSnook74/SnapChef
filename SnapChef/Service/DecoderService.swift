@@ -7,11 +7,6 @@
 
 import Foundation
 
-enum DecodingCustomError: Error {
-    case invalidData
-    case parsingFailed(underlyingError: Error)
-}
-
 protocol DecoderServiceProtocol {
     func decode<T: Decodable>(_ type: T.Type, from data: Data) throws(DecodingCustomError) -> T
 }
@@ -31,4 +26,9 @@ struct DecoderService: DecoderServiceProtocol {
             throw DecodingCustomError.parsingFailed(underlyingError: error)
         }
     }
+}
+
+enum DecodingCustomError: Error {
+    case invalidData
+    case parsingFailed(underlyingError: Error)
 }

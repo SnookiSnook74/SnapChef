@@ -8,8 +8,8 @@
 import SwiftUI
 import SwiftData
 
-struct CentralTabView: View {
-    @State private var viewModel = CentralTabViewModel()
+struct PhotoTabView: View {
+    @State private var viewModel = PhotoTabViewModel()
     
     var body: some View {
         NavigationView {
