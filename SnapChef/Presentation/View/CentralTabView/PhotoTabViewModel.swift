@@ -14,22 +14,19 @@ final class PhotoTabViewModel {
     var recipe: Recipe?
     var isLoading = false
     var errorMessage: String?
-    
-    func fetchRecipe() {
-        Task {
-            await getRecipe()
-        }
-    }
-    
-    private func getRecipe() async {
+    private var requestService = ChatRequestBuilder()
+    private let networkService = NetworkService()
+    private let jsonDecoder = DecoderService()
+
+    func getRecipe(urlImage: String? = nil) async {
         self.isLoading = true
         self.errorMessage = nil
         self.recipe = nil
-        
-        let requestService = ChatRequestBuilder()
-        let networkService = NetworkService()
-        let jsonDecoder = DecoderService()
-        
+
+        if let urlImage = urlImage, !urlImage.isEmpty {
+            requestService = requestService.setImageURL(urlImage)
+        }
+
         guard let request = requestService.buildRequest() else {
             self.isLoading = false
             self.errorMessage = "Ошибка формирования запроса."
