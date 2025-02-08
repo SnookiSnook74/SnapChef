@@ -10,14 +10,13 @@ import Foundation
 final class GetRecipeUseCase: Sendable {
     private let networkService: NetworkServiceProtocol
     private let jsonDecoder: DecoderServiceProtocol
-    private let requestBuilder: ChatRequestBuilder
+    private let requestBuilder = ChatRequestBuilder()
 
-    init(networkService: NetworkServiceProtocol = NetworkService(),
-         jsonDecoder: DecoderServiceProtocol = DecoderService(),
-         requestBuilder: ChatRequestBuilder = ChatRequestBuilder()) {
+    init(networkService: NetworkServiceProtocol,
+         jsonDecoder: DecoderServiceProtocol
+    ) {
         self.networkService = networkService
         self.jsonDecoder = jsonDecoder
-        self.requestBuilder = requestBuilder
     }
 
     func execute(withImageURL urlImage: String, description: String) async throws -> Recipe {

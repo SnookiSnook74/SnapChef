@@ -6,5 +6,5 @@
 //
 
 final class DataLayerAssembly {
-    func registerServices(in container: DIContainer) {}
+    func registerData(in container: DIContainer) {}
 }

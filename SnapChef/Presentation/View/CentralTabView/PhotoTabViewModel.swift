@@ -14,7 +14,11 @@ final class PhotoTabViewModel {
     var recipe: Recipe?
     var isLoading = false
     var errorMessage: String?
-    private var getRecipeUseCase = GetRecipeUseCase()
+    var getRecipeUseCase: GetRecipeUseCase
+    
+    init(getRecipeUseCase: GetRecipeUseCase) {
+        self.getRecipeUseCase = getRecipeUseCase
+    }
     
     func getRecipe(_ urlImage: String) async {
         self.isLoading = true
