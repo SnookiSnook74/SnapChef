@@ -14,50 +14,27 @@ final class PhotoTabViewModel {
     var recipe: Recipe?
     var isLoading = false
     var errorMessage: String?
-    private var requestService = ChatRequestBuilder()
-    private let networkService = NetworkService()
-    private let jsonDecoder = DecoderService()
-
-    func getRecipe(urlImage: String? = nil) async {
+    var getRecipeUseCase: GetRecipeUseCase
+    
+    init(getRecipeUseCase: GetRecipeUseCase) {
+        self.getRecipeUseCase = getRecipeUseCase
+    }
+    
+    func getRecipe(_ urlImage: String) async {
         self.isLoading = true
         self.errorMessage = nil
         self.recipe = nil
-
-        if let urlImage = urlImage, !urlImage.isEmpty {
-            requestService = requestService.setImageURL(urlImage)
-        }
-
-        guard let request = requestService.buildRequest() else {
-            self.isLoading = false
-            self.errorMessage = "Ошибка формирования запроса."
-            return
-        }
         
         do {
-            let dataResult = try await networkService.fetchData(urlRequest: request)
-            
-            if let dataString = String(data: dataResult, encoding: .utf8) {
-                print("Полученные данные: \(dataString)")
-            } else {
-                print("Невозможно преобразовать данные в строку.")
-            }
-            
-            let apiResponse = try jsonDecoder.decode(OpenAIResponse.self, from: dataResult)
-            
-            if let choice = apiResponse.choices.first, let message = choice.message,
-               let content = message.content {
-                let recipeData = Data(content.utf8)
-                let parsedRecipe = try jsonDecoder.decode(Recipe.self, from: recipeData)
-                
-                self.recipe = parsedRecipe
-                self.isLoading = false
-            } else {
-                self.errorMessage = "Некорректный ответ от сервера."
-                self.isLoading = false
-            }
+            let recipe = try await getRecipeUseCase.execute(
+                withImageURL: urlImage,
+                description: """
+            Ты профессиональный шеф-повар с многолетним опытом. Я буду отправлять тебе фотографии с ингредиентами, и твоя задача — составить максимально подробный рецепт блюда, которое можно из них приготовить. В рецепте укажи название блюда, полный список ингредиентов с точными пропорциями, подробное описание всех этапов приготовления, время и температуру приготовления, а также рекомендации по подаче и украшению. Если на фотографии присутствуют предметы, не являющиеся ингредиентами, добавь в начале сообщения заголовок 'На фото не продукты' и опиши, какие объекты не относятся к еде.
+            """)
+            self.recipe = recipe
         } catch {
             self.errorMessage = "Ошибка: \(error.localizedDescription)"
-            self.isLoading = false
         }
+        self.isLoading = false
     }
 }

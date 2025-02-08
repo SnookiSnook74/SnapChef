@@ -8,7 +8,7 @@
 import Foundation
 
 /// Протокол для сервиса, выполняющего сетевые запросы
-protocol NetworkServiceProtocol {
+protocol NetworkServiceProtocol: Sendable {
     /// Асинхронный метод получения данных по URLRequest, выбрасывающий только ошибки типа NetworkError
     func fetchData(urlRequest: URLRequest) async throws(NetworkError) -> Data
 }

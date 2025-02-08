@@ -7,7 +7,10 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ContentTabView: View {
+    
+    @State private var selectTab = 1
+    private let photoTabViewModel: PhotoTabViewModel
 
     init() {
         // Фон
@@ -16,19 +19,27 @@ struct ContentView: View {
         UITabBar.appearance().unselectedItemTintColor = UIColor.gray
         // Цвет активного элемента
         UITabBar.appearance().tintColor = UIColor.white
+        
+        guard let viewModel = DIContainer.shared.resolve(PhotoTabViewModel.self) else {
+            fatalError("Не удалось разрешить зависимость PhotoTabViewModel")
+        }
+        photoTabViewModel = viewModel
     }
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectTab) {
             Text("First Tab").tabItem {
                 Label("First", systemImage: "star")
             }
-            PhotoTabView().tabItem {
+            .tag(0)
+            PhotoTabView(viewModel: photoTabViewModel).tabItem {
                 Label("Hello", systemImage: "book")
             }
+            .tag(1)
             Text("Second Tab").tabItem {
                 Label("Second", systemImage: "star")
             }
+            .tag(2)
         }
     }
 }

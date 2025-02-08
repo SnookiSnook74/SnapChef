@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class DIContainer: ObservableObject {
+final class DIContainer {
     
     nonisolated(unsafe) static let shared = DIContainer()
     
@@ -28,10 +28,11 @@ final class DIContainer: ObservableObject {
 
 extension DIContainer {
     
+    @MainActor
     func registerAllDependencies() {
         ServiceLayerAssembly().registerServices(in: self)
-        DataLayerAssembly().registerServices(in: self)
-        DomainLayerAssembly().registerServices(in: self)
-        PresentationLayerAssembly().registerServices(in: self)
+        DataLayerAssembly().registerData(in: self)
+        DomainLayerAssembly().registerDomain(in: self)
+        PresentationLayerAssembly().registerPresentation(in: self)
     }
 }

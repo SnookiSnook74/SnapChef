@@ -20,7 +20,7 @@ struct ChatRequestBuilder: RequestBuilderServiceProtocol {
     /// Стартовое сообщение с опипаснием чего мы ждем
     private var userMessage: String?
     /// Json схема в рамках которой должна отвечать GPT
-    private var jsonSchema: [String: Any]?
+    private nonisolated(unsafe) var jsonSchema: [String: Any]?
     /// url картинки если мы хотим отправить фото на распознование
     private var imageURL: String?
     
