@@ -29,7 +29,7 @@ struct SnapChefApp: App {
 
     var body: some Scene {
         WindowGroup {
-            CentralTabView()
+            ContentView()
         }
         .modelContainer(sharedModelContainer)
     }
