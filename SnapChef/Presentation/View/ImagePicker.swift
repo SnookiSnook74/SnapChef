@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 /// Обертка для работы с фото в SwiftUI
 struct ImagePicker: UIViewControllerRepresentable {
     var sourceType: UIImagePickerController.SourceType = .camera
