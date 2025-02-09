@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Обертка для работы с фото в SwiftUI
+/// Обертка для работы с фото в SwiftUI (временное решение потом заюзаю AVFoundation, чтобы не приходилось открывать камеру)
 struct ImagePicker: UIViewControllerRepresentable {
     var sourceType: UIImagePickerController.SourceType = .camera
     @Binding var selectedImage: UIImage?
