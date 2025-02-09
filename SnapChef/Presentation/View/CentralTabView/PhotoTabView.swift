@@ -71,9 +71,7 @@ struct PhotoTabView: View {
                         print("Фото не выбрано!")
                         return
                     }
-                    if let imageData = selectedImage.jpegData(compressionQuality: 0.8) {
-                        let base64String = imageData.base64EncodedString()
-                        let dataUrlString = "data:image/jpeg;base64,\(base64String)"
+                    if let dataUrlString = selectedImage.openAIConvert() {
                         Task {
                             await viewModel.getRecipe(dataUrlString)
                         }
