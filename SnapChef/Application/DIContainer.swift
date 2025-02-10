@@ -27,8 +27,7 @@ final class DIContainer {
 }
 
 extension DIContainer {
-    
-    @MainActor
+
     func registerAllDependencies() {
         ServiceLayerAssembly().registerServices(in: self)
         DataLayerAssembly().registerData(in: self)
