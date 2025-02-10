@@ -14,9 +14,12 @@ final class PhotoTabViewModel {
     var recipe: Recipe?
     var isLoading = false
     var errorMessage: String?
-    var getRecipeUseCase: GetRecipeUseCase
+    let getRecipeUseCase: GetRecipeUseCase
     
-    init(getRecipeUseCase: GetRecipeUseCase) {
+    init() {
+        guard let getRecipeUseCase = DIContainer.shared.resolve(GetRecipeUseCase.self) else {
+            fatalError("Не удалось решить зависимость GetRecipeUseCase")
+        }
         self.getRecipeUseCase = getRecipeUseCase
     }
     

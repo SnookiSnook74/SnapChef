@@ -6,14 +6,6 @@
 //
 
 final class PresentationLayerAssembly {
-    @MainActor
-    func registerPresentation(in container: DIContainer) {
-        container.register(PhotoTabViewModel.self) {
-            guard let getRecipeuseCase = container.resolve(GetRecipeUseCase.self) else {
-                fatalError("Не удалось решить зависимость GetRecipeUseCase")
-            }
-            
-            return PhotoTabViewModel(getRecipeUseCase: getRecipeuseCase)
-        }
-    }
+
+    func registerPresentation(in container: DIContainer) {}
 }

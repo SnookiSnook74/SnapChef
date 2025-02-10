@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct PhotoTabView: View {
-    let viewModel: PhotoTabViewModel
+    let viewModel = PhotoTabViewModel()
     @State private var selectedImage: UIImage?
     @State private var isShowingImagePicker = false
 
