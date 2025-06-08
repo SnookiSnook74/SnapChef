@@ -24,23 +24,27 @@ struct NetworkService: NetworkServiceProtocol {
     func fetchData(urlRequest: URLRequest) async throws(NetworkError) -> Data {
         let maxRetries: Int = 3
         var currentAttempt = 1
-        
+
         while true {
             do {
                 let (data, response) = try await session.data(for: urlRequest)
-                
+
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw NetworkError.badResponse(statusCode: -1)
                 }
                 guard (200...299).contains(httpResponse.statusCode) else {
                     throw NetworkError.badResponse(statusCode: httpResponse.statusCode)
                 }
-                
+
                 return data
-                
+
             } catch {
                 if currentAttempt >= maxRetries {
-                    throw NetworkError.underlying(error)
+                    if let networkError = error as? NetworkError {
+                        throw networkError
+                    } else {
+                        throw NetworkError.underlying(error)
+                    }
                 }
                 currentAttempt += 1
             }
